@@ -20,6 +20,7 @@ const router = new VueRouter({
     // { path:"/", name="home", component: UsersComponent }
     { path: '/', redirect: { name: "login" } },
     { path: '/login', name: "login", component: LoginComponent },
+    { path: '/video', name: "video", component: VideoComponent },
   ]
 })
 
