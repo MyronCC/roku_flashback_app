@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:8889
--- Generation Time: Apr 09, 2020 at 10:32 PM
+-- Generation Time: Apr 12, 2020 at 03:14 AM
 -- Server version: 5.7.26
 -- PHP Version: 7.3.8
 
@@ -108,6 +108,26 @@ INSERT INTO `tbl_cast` (`cast_id`, `cast_name`) VALUES
 (41, 'Tom Costello'),
 (4, 'Vin Diesel'),
 (2, 'Zoe Saldana');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_category`
+--
+
+CREATE TABLE `tbl_category` (
+  `category_id` int(20) NOT NULL,
+  `category_name` varchar(250) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `tbl_category`
+--
+
+INSERT INTO `tbl_category` (`category_id`, `category_name`) VALUES
+(1, 'movie'),
+(2, 'music'),
+(3, 'tv');
 
 -- --------------------------------------------------------
 
@@ -402,7 +422,7 @@ INSERT INTO `tbl_genre` (`genre_id`, `genre_name`) VALUES
 (13, 'Family'),
 (14, 'Fantasy'),
 (15, 'Romance'),
-(16, 'Sport');
+(16, 'Music');
 
 -- --------------------------------------------------------
 
@@ -678,7 +698,11 @@ INSERT INTO `tbl_movies` (`movies_id`, `movies_cover`, `movies_title`, `movies_y
 (18, 'danceswithwolves.jpg', 'Dances with Wolves', '1990', '3h 01m', 'Lieutenant John Dunbar, assigned to a remote western Civil War outpost, befriends wolves and Indians, making him an intolerable aberration in the military.', 'danceswithwolves.mp4', 'Nov 9, 1990'),
 (19, 'prettywoman.jpg', 'Pretty Woman', '1990', '1h 59m', 'A man in a legal but hurtful business needs an escort for some social events, and hires a beautiful prostitute he meets... only to fall in love.', 'prettywoman.mp4', 'Mar 23, 1990'),
 (20, 'vogue.jpg', 'Vogue', '1990', '4m 50s', '', 'vogue.jpg', 'Mar 27, 1990'),
-(21, 'silver.jpg', 'Silver Linings Playbook', '2012', '2h 2m', 'After a stint in a mental institution, former teacher Pat Solitano moves back in with his parents and tries to reconcile with his ex-wife. Things get more challenging when Pat meets Tiffany, a mysterious girl with problems of her own.', 'Silver.jpg', 'December 25, 2012');
+(21, 'tomandjerry.jpg', 'Tom and Jerry Series', '1950', '', '', 'tomandjerry.mp4', ''),
+(22, 'Felixthecat.jpg', 'Felix the Cat', '1950', '', '', 'felixthecat.mp4', ''),
+(23, 'pinkpanther.jpg', 'Pink Panther', '1969', '', '', 'pink panther.mp4', ''),
+(24, 'spaceghost.jpg', 'Space Ghost', '1960', '', '', 'spaceghost.mp4', ''),
+(25, 'darkingduck.jpg', 'Darking Duck', '1990', '', '', 'darkingduck.mp4', '');
 
 -- --------------------------------------------------------
 
@@ -750,6 +774,50 @@ INSERT INTO `tbl_mov_cast` (`mov_cast_id`, `movies_id`, `cast_id`) VALUES
 (51, 19, 52),
 (52, 20, 53),
 (53, 21, 5);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_mov_cate`
+--
+
+CREATE TABLE `tbl_mov_cate` (
+  `mov_detail_id` int(20) NOT NULL,
+  `movies_id` int(20) NOT NULL,
+  `category_id` int(20) NOT NULL,
+  `genre_id` int(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `tbl_mov_cate`
+--
+
+INSERT INTO `tbl_mov_cate` (`mov_detail_id`, `movies_id`, `category_id`, `genre_id`) VALUES
+(1, 1, 1, 5),
+(2, 2, 1, 5),
+(3, 3, 1, 5),
+(4, 4, 2, 0),
+(5, 5, 1, 5),
+(6, 6, 1, 5),
+(7, 7, 1, 1),
+(8, 8, 2, 0),
+(9, 9, 1, 10),
+(10, 10, 1, 15),
+(11, 11, 1, 3),
+(12, 12, 2, 0),
+(13, 13, 1, 7),
+(14, 14, 1, 7),
+(15, 15, 1, 1),
+(16, 16, 2, 0),
+(17, 17, 1, 5),
+(18, 18, 1, 10),
+(19, 19, 1, 15),
+(20, 20, 2, 0),
+(21, 21, 3, 0),
+(22, 22, 3, 0),
+(23, 23, 3, 0),
+(24, 24, 3, 0),
+(25, 25, 3, 0);
 
 -- --------------------------------------------------------
 
@@ -850,26 +918,23 @@ CREATE TABLE `tbl_mov_genre` (
 --
 
 INSERT INTO `tbl_mov_genre` (`mov_genre_id`, `movies_id`, `genre_id`) VALUES
-(1, 1, 1),
-(2, 1, 2),
-(3, 1, 9),
-(4, 2, 1),
-(5, 2, 5),
-(6, 2, 6),
-(7, 2, 10),
-(8, 3, 1),
-(9, 3, 5),
-(10, 3, 9),
-(11, 4, 1),
-(12, 4, 2),
-(13, 4, 5),
-(14, 4, 9),
-(15, 5, 8),
-(16, 5, 13),
-(17, 5, 14),
-(18, 6, 5),
-(19, 6, 6),
-(20, 6, 10),
+(1, 1, 5),
+(2, 2, 4),
+(3, 2, 5),
+(4, 3, 5),
+(5, 5, 4),
+(6, 5, 5),
+(7, 6, 5),
+(8, 7, 1),
+(9, 9, 10),
+(10, 10, 15),
+(11, 11, 3),
+(12, 13, 7),
+(13, 14, 7),
+(14, 15, 1),
+(15, 17, 5),
+(16, 18, 10),
+(17, 19, 15),
 (21, 7, 1),
 (22, 7, 2),
 (23, 7, 3),
@@ -1039,10 +1104,7 @@ CREATE TABLE `tbl_user` (
 
 INSERT INTO `tbl_user` (`user_id`, `user_fname`, `user_name`, `user_pass`, `user_email`, `user_date`, `user_ip`, `user_avatar`, `user_permissions`, `user_admin`) VALUES
 (3, 'Yui', 'Chen', '1234', 'mchen3593@gmail.com', '2020-03-09 15:48:21', '::1', 'eriri', 5, 1),
-(4, 'Kate', 'user2', 'password', 'me@ou.com', '2020-03-09 15:49:04', '::1', 'null', 5, 1),
-(5, 'Madelaine', 'user3', 'password', 'me@you.com', '2020-03-09 15:49:39', '::1', 'null', 3, 0),
-(6, 'Isabelle', 'user4', 'password', 'me@you.com', '2020-03-09 15:50:13', 'no', 'null', 2, 0),
-(7, 'Serena', 'user5', 'password', 'me@you.com', '2020-03-09 15:50:48', 'no', 'null', 2, 0);
+(4, 'child', 'child', '1234', 'none@no.com', '2020-03-09 15:49:04', '::1', 'null', 3, 1);
 
 --
 -- Indexes for dumped tables
@@ -1060,6 +1122,12 @@ ALTER TABLE `tbl_arating`
 ALTER TABLE `tbl_cast`
   ADD PRIMARY KEY (`cast_id`),
   ADD UNIQUE KEY `cast_name` (`cast_name`);
+
+--
+-- Indexes for table `tbl_category`
+--
+ALTER TABLE `tbl_category`
+  ADD UNIQUE KEY `category_id` (`category_id`) USING BTREE;
 
 --
 -- Indexes for table `tbl_comments`
@@ -1102,6 +1170,12 @@ ALTER TABLE `tbl_movies`
 --
 ALTER TABLE `tbl_mov_cast`
   ADD PRIMARY KEY (`mov_cast_id`);
+
+--
+-- Indexes for table `tbl_mov_cate`
+--
+ALTER TABLE `tbl_mov_cate`
+  ADD UNIQUE KEY `mov_cate_id` (`mov_detail_id`) USING BTREE;
 
 --
 -- Indexes for table `tbl_mov_country`
@@ -1201,7 +1275,7 @@ ALTER TABLE `tbl_language`
 -- AUTO_INCREMENT for table `tbl_movies`
 --
 ALTER TABLE `tbl_movies`
-  MODIFY `movies_id` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `movies_id` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `tbl_mov_cast`
