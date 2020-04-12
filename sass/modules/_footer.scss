@@ -1,0 +1,38 @@
+footer {
+    position: absolute;
+    display: flex;
+    flex-direction: roW;
+    bottom: 0;
+    width: 100%;
+    padding: 40px 10% 40px 10%;
+    height: 20px;
+    // line-height: 60px;
+    background-color: $dark-bg;
+
+    span {
+        float: left;
+    }
+
+    p { 
+        display: inline-block;
+        margin: 0 auto;
+        // width: 100%;
+        text-align: center;
+
+        @include vertical-align();
+    }
+
+	ul { 
+        list-style-type: none;
+        @include vertical-align();
+        margin-bottom: auto;
+        max-width: 95px;
+
+		li {
+			font-size: 2.5em;
+			display: inline-block;
+			margin-right: 0.4em;
+			color: rgba(255, 255, 255, 0.3);
+		}
+	}
+}

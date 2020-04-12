@@ -1,103 +1,73 @@
-// todo => use a key to track the current video, or just pass the video in as a ref to the function and grab its source
-import UsersComponent from "./components/UsersComponent.js";
 
-Vue.component('player', {
-  props: ['movie'],
+import AllUsersComponent from './components/AllUsersComponent.js';
+import LoginComponent from './components/LoginComponent.js';
+import UserHomeComponent from './components/UserHomeComponent.js'
 
-  template: ` 
-  <div>
-    <h3 class="movie-title">{{ movie.videotitle }}</h3>
-    <video :src="'video/' + movie.vidsource" controls autoplay></video>
-    <div class="movie-details">
-      <p>{{ movie.videodescription }}</p>
-    </div>
-  </div>
-  `
-})
+(() => {
+  let router = new VueRouter({
+    // set routes
+    routes: [
+      { path: '/', redirect: { name: "login" } },
+      { path: '/login', name: "login", component: LoginComponent },
+      { path: '/users', name: 'users', component: AllUsersComponent },
+      { path: '/userhome', name: 'home', component: UserHomeComponent, props: true}
+    ]
+  });
 
-const router = new VueRouter({
-  routers: [
-    // { path:"/", name="home", component: UsersComponent }
-    { path: '/', redirect: { name: "login" } },
-    { path: '/login', name: "login", component: LoginComponent },
-    { path: '/video', name: "video", component: VideoComponent },
-  ]
-})
+  const vm = new Vue({
+    data: {
+      authenticated: false,
+      administrator: false,
+      user: [],
 
-var vm = new Vue({
-  el: "#app",
-
-  router,
-
-  data: {
-
-    // mock up the user - this well eventually come from the database UMS (user management system)
-    user: {   
-      isLoggedIn: true,
-      settings: {}
+      //currentUser: {},
     },
 
-    // this data would also come from the database, but we'll just mock it up for now
-    videodata: [
-      { name: "Star Wars The Force Awakens", thumb: "forceawakens.jpg", vidsource: "forceawakens.mp4", description: "yet another star wars movie" },
-      { name: "Stranger Things", thumb: "strangerthings.jpg", vidsource: "strangerthings.mp4", description: "don't get lost in the upside down" },
-      { name: "Marvel's The Avengers", thumb: "avengers.jpg", vidsource: "avengers.mp4", description: "will they make black widow action figures this time?" }
-    ],
+    methods: {
+      setAuthenticated(status, data) {
+        this.authenticated = status;
+        this.user = data;
+      },
 
-    movie: {
-      videotitle: "video title goes here",
-      vidsource: "",
-      videodescription: "video description here"},
+      logout() {
+        // push user back to login page
+        this.$router.push({ name: "login" });
+        this.authenticated = false;
 
-
-    showDetails: false
-  },
-
-  create: function() {
-    // run a fetch call and get the user data
-    console.log('created lifecycle hook fired here, go get user data');
-    // this.getUserData();
-
-  },
-  methods: {
-    getUserData() {
-      // do a fetch call here and get the user form from the DB
-      const url = './includes/index.php?getUser=1';
-
-      fetch(url) // get data from the DB
-      .then(res => res.json()) // translate JSON to plain object
-      .then(data => { // use the plain data object (the user)
-        console.log(data); // log it to the console (testing)
-
-        // put our DB data into Vue
-        this.user.settings = data[0];
-      })
-      .catch((error) => console.error(error))
-    },
-    setUserPrefs() {
-      // this is the preferences control, hit the api when ready (or use a component)
-      console.log('set user prefs here');
+        if(localStorage.getItem("cachedUser")) {
+          localStorage.removeItem("cachedUser");
+        }
+        if(localStorage.getItem("catchVideo")){
+          localStorage.removeItem("catchVideo");
+        }
+      }
     },
 
-    userLogin() {
-      // call the login route, and / or load the login component
-      console.log('do login / logout on click');
-    
-      // this is a ternary statement -> shorthand for if / else
-      // the expression evauates to true or false - if it's true, set the value equal to 
-      // the left of the colon, if it's false, set the value equal to the right
-      this.user.isLoggedIn = (this.user.isLoggedIn) ? false : true;
+    created:function(){
+      // check for a user in localstorage
+      // if we've logged in before, this should be here until we manuallly remove
+
+      if(localStorage.getItem("cachedUser")){
+        let user = JSON.parse(localStorage.getItem("cachedUser"));
+
+        this.authenticated = true;
+        this.$router.push({ name:'home', params:{ currentuser:user }});
+      }else{
+        this.$router.push({ name:'login'});
+      }
+     
     },
 
-    showMovieDetails({name, vidsource, description}) {
-      // console.log('show these details:' , movie);
+    router: router
+  }).$mount("#app");
 
-      this.movie.videotitle = name;
-      this.movie.vidsource = vidsource;
-      this.movie.videodescription = description;
+  router.beforeEach((to, from, next) => {
+    //console.log('router guard fired!', to, from, vm.authenticated);
 
-      // make the movie detail show off
-      this.showDetails = true;
+    if (vm.authenticated == false) {
+      next("/login");
+    } else {
+      next();
     }
-  }
-});
+  });
+})();
